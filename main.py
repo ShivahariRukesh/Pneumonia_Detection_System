@@ -114,7 +114,13 @@ class Home(QWidget):
         path=filename[0]
         path=str(path)
         print(path)
-        model=load_model('D:\\sem7\\project\\modelTrain1.h5') 
+
+        # For windows
+        # model=load_model('D:\\sem7\\project\\modelTrain1.h5')
+        
+        # For MacOs 
+        model=load_model('/Users/joblessapple/Desktop/modelTrain1.h5')
+        
         print("Model:",model)
         img_file=image.load_img(path,target_size=(224,224))
         x=image.img_to_array(img_file)
@@ -295,7 +301,7 @@ class UserInterface(QMainWindow):
 
     def restInit(self):
         if (self.username =='None'): 
-            print("Stfu")
+            print("No username")
         else:    
             apiEndpoint = "http://localhost:3000/api/patient/myPatient"
             response = requests.post(apiEndpoint, json={'name': self.username})
@@ -317,7 +323,7 @@ class UserInterface(QMainWindow):
             for user in dataUser:
                 item = QListWidgetItem()
                 # widget = UserItemWidget(user)
-
+                print("The patients are",user["name"], self.username,noPrediction)
                 widget = UserItemWidget(self.communicate,user["name"],self.username,noPrediction)
                 item.setSizeHint(widget.sizeHint())
                 self.user_list.addItem(item)
