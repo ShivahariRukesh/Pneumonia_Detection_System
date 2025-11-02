@@ -760,7 +760,12 @@ layout = QVBoxLayout()
 label = QLabel(widget)
 
 # Load an image from file
-pixmap = QPixmap(r"D:\sem7\project\Python\Unhealthy.jpg")
+# For Windows
+# pixmap = QPixmap(r"D:\sem7\project\Python\Unhealthy.jpg")
+
+
+#For Mac
+pixmap = QPixmap("/Users/joblessapple/Desktop/scrn.png")
 
 # Set the pixmap to the label
 label.setPixmap(pixmap)
@@ -774,3 +779,8 @@ widget.setLayout(layout)
 widget.show()
 
 app.exec_()
+
+
+
+
+
