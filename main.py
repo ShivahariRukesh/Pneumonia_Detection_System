@@ -237,60 +237,69 @@ class ResultDisplayWidget(QWidget):
                           
 
 class UserItemWidget(QWidget):
-    # Define a custom signal with user data
-    # action_triggered = pyqtSignal(str)
-
-    def __init__(self,communicate, user_data,username,numberOfPrediction):
+    def __init__(self, communicate, user_data, username, numberOfPrediction):
         super().__init__()
-        layout = QHBoxLayout()
-        self.communicate = communicate
-        self.name_label = QLabel(user_data.upper())
-        self.button = QPushButton("Action")
-        layout.addWidget(self.name_label)
-        if(numberOfPrediction>0):
-            layout.addWidget(self.button)
-        self.setLayout(layout)
-
-        # Connect the button's clicked signal to the slot function
-        self.button.clicked.connect(lambda: self.on_action_triggered(user_data,username))
-
-        # Store the user data
-        # self.user_data = user_data
-
-    # def on_action_triggered(self):
-        # Emit the custom signal with user data when the button is clicked
-        # self.action_triggered.emit(self.user_data)
-    def on_action_triggered(self, user_data,username):
+        loadUi("useritemwidget.ui", self)
         
-        print("Action button clicked for user:", user_data)
-        widget_to_remove = widget.widget(widget.currentIndex()+1)
-        widget.removeWidget(widget_to_remove)               
+        self.communicate = communicate
+        self.user_data = user_data
+        self.username = username
+        
+        # Set the patient name (this replaces "Patient Name" placeholder)
+        self.nameLabel.setText(user_data.upper())
+        
+        # Show or hide the action button based on numberOfPrediction
+        if numberOfPrediction > 0:
+            self.actionButton.setVisible(True)
+            self.actionButton.clicked.connect(self.on_action_triggered)
+        else:
+            self.actionButton.setVisible(False)
+    
+    def on_action_triggered(self):
+        print("Action button clicked for user:", self.user_data)
+        
+        # Remove the current widget and add Home widget
+        widget_to_remove = widget.widget(widget.currentIndex() + 1)
+        widget.removeWidget(widget_to_remove)
+        
         home = Home(self.communicate)
         widget.addWidget(home)
-        widget.setCurrentIndex(widget.currentIndex()+1)    
-        self.communicate.patientName.emit(user_data)
-        self.communicate.userName.emit(username)
-
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+        
+        # Emit signals
+        self.communicate.patientName.emit(self.user_data)
+        self.communicate.userName.emit(self.username)
 
 
 class UserInterface(QMainWindow):
     def __init__(self,communicate):
 
         super().__init__()
-        self.setWindowTitle("User Interface")
-        self.setGeometry(100, 100, 400, 100)
-
+        # self.setWindowTitle("User Interface")
+        # self.setGeometry(100, 100, 400, 100)
+        loadUi("userInterface.ui", self)
         self.communicate = communicate
         self.username = None
+        
+        # Connect signals
+        self.logoutButton.clicked.connect(self.goBack)
+        self.addButton.clicked.connect(self.addPatient)
+        self.historyButton.clicked.connect(self.showHistory)
+        self.paymentButton.clicked.connect(self.khaltiPayment)
+        
+        # Connect to username signal
+        self.communicate.userName.connect(self.setUserName)
+        # self.communicate = communicate
+        # self.username = None
         self.layout = QVBoxLayout()
         
         self.goBackButton = QPushButton("Logout", self)
-        self.goBackButton.setFixedSize(50, 50)
+        # self.goBackButton.setFixedSize(50, 50)
         self.goBackButton.move(300, 10)
         self.layout.addWidget(self.goBackButton)
             
-        self.goBackButton.clicked.connect(self.goBack)
-        self.communicate.userName.connect(self.setUserName)
+        # self.goBackButton.clicked.connect(self.goBack)
+        # self.communicate.userName.connect(self.setUserName)
 
 
  
@@ -335,18 +344,24 @@ class UserInterface(QMainWindow):
             self.layout.addWidget(self.user_list)
 
             # Create Add button
-            self.add_button = QPushButton("Add")
-            self.layout.addWidget(self.add_button, alignment=QtCore.Qt.AlignTop | QtCore.Qt.AlignRight)
+            self.add_button = QPushButton("Add Patient")
+            # self.layout.addWidget(self.add_button, alignment=QtCore.Qt.AlignTop | QtCore.Qt.AlignRight)
+            self.layout.addWidget(self.add_button)
+            
             self.add_button.clicked.connect(self.addPatient)
 
             # Create History button
             self.history_button = QPushButton("History")
-            self.layout.addWidget(self.history_button, alignment=QtCore.Qt.AlignBottom | QtCore.Qt.AlignLeft)
+            # self.layout.addWidget(self.history_button, alignment=QtCore.Qt.AlignBottom | QtCore.Qt.AlignLeft)
+            self.layout.addWidget(self.history_button)
+            
             self.history_button.clicked.connect(self.showHistory)
 
             # Create Payment button
             self.payment_button = QPushButton("Payment")
-            self.layout.addWidget(self.payment_button, alignment=QtCore.Qt.AlignBottom | QtCore.Qt.AlignRight)
+            # self.layout.addWidget(self.payment_button, alignment=QtCore.Qt.AlignBottom | QtCore.Qt.AlignRight)
+            self.layout.addWidget(self.payment_button)
+           
             self.payment_button.clicked.connect(self.khaltiPayment)
 
 
@@ -487,7 +502,7 @@ class AddPatient(QDialog):
     def __init__(self,communicate):
         super().__init__()
         loadUi("addPatient.ui",self)
-        self.signupbutton.clicked.connect(self.addedfunction)
+        self.addPatientButton.clicked.connect(self.addPatientHandler)
 
         layout = QVBoxLayout()
         self.username = None
@@ -516,7 +531,7 @@ class AddPatient(QDialog):
         widget.setCurrentIndex(1)
         self.communicate.userName.emit(self.username)  
 
-    def addedfunction(self):
+    def addPatientHandler(self):
 
         if(self.name.text() =="" or self.gender.text()=="" or self.age.text()==""):
             print("While adding the patient enter the required credentials")

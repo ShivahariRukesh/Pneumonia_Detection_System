@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>700</width>
+    <height>80</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+     QWidget {
+       background-color: #2f3136;
+       border-radius: 10px;
+     }
+     QLabel {
+       color: #ffffff;
+       font-size: 16pt;
+       font-weight: bold;
+       background: transparent;
+       padding-left: 10px;
+     }
+     QLabel#nameLabel {
+       color: #ffffff;
+     }
+     QLabel#iconLabel {
+       color: #5865f2;
+       font-size: 24pt;
+     }
+     QPushButton {
+       background-color: #43b581;
+       color: #ffffff;
+       font-size: 13pt;
+       font-weight: bold;
+       border: none;
+       border-radius: 8px;
+       padding: 8px 20px;
+       min-width: 100px;
+     }
+     QPushButton:hover {
+       background-color: #3aa374;
+     }
+     QPushButton:pressed {
+       background-color: #2d8a5e;
+     }
+   </string>
+  </property>
+
+  <layout class="QHBoxLayout" name="mainLayout">
+   <property name="spacing">
+    <number>15</number>
+   </property>
+   <property name="leftMargin">
+    <number>15</number>
+   </property>
+   <property name="topMargin">
+    <number>10</number>
+   </property>
+   <property name="rightMargin">
+    <number>15</number>
+   </property>
+   <property name="bottomMargin">
+    <number>10</number>
+   </property>
+
+   <!-- User Icon -->
+   <item>
+    <widget class="QLabel" name="iconLabel">
+     <property name="minimumSize">
+      <size>
+       <width>40</width>
+       <height>40</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>40</width>
+       <height>40</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>👤</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+
+   <!-- Patient Name -->
+   <item>
+    <widget class="QLabel" name="nameLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Patient Name</string>
+     </property>
+    </widget>
+   </item>
+
+   <!-- Action Button -->
+   <item>
+    <widget class="QPushButton" name="actionButton">
+     <property name="minimumSize">
+      <size>
+       <width>120</width>
+       <height>40</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Check Up</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
