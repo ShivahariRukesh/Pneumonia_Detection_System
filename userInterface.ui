@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>User Interface</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+     QMainWindow {
+       background: qlineargradient(
+         spread:pad,
+         x1:0, y1:0,
+         x2:0, y2:1,
+         stop:0 #3a3a3a,
+         stop:1 #0e0e0e
+       );
+     }
+     QLabel {
+       color: #ffffff;
+       font-size: 14pt;
+     }
+     QPushButton {
+       background-color: #5865f2;
+       color: #ffffff;
+       font-size: 13pt;
+       font-weight: bold;
+       border: none;
+       border-radius: 8px;
+       padding: 10px;
+     }
+     QPushButton:hover {
+       background-color: #4752c4;
+     }
+     QPushButton#logoutButton {
+       background-color: #ed4245;
+       font-size: 11pt;
+     }
+     QPushButton#logoutButton:hover {
+       background-color: #c93638;
+     }
+     QPushButton#addButton {
+       background-color: #43b581;
+     }
+     QPushButton#addButton:hover {
+       background-color: #3aa374;
+     }
+     QPushButton#historyButton {
+       background-color: #faa61a;
+     }
+     QPushButton#historyButton:hover {
+       background-color: #d98e16;
+     }
+     QPushButton#paymentButton {
+       background-color: #5865f2;
+     }
+     QPushButton#paymentButton:hover {
+       background-color: #4752c4;
+     }
+     QListWidget {
+       background-color: #2f3136;
+       color: #ffffff;
+       border: 1px solid #555;
+       border-radius: 8px;
+       padding: 8px;
+       font-size: 13pt;
+     }
+     QListWidget::item {
+       padding: 5px;
+       border-radius: 6px;
+     }
+     QListWidget::item:hover {
+       background-color: #40444b;
+     }
+     QListWidget::item:selected {
+       background-color: #5865f2;
+     }
+   </string>
+  </property>
+
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="mainLayout">
+    <property name="spacing">
+     <number>20</number>
+    </property>
+    <property name="leftMargin">
+     <number>20</number>
+    </property>
+    <property name="topMargin">
+     <number>20</number>
+    </property>
+    <property name="rightMargin">
+     <number>20</number>
+    </property>
+    <property name="bottomMargin">
+     <number>20</number>
+    </property>
+
+    <!-- Header with Title and Logout -->
+    <item>
+     <layout class="QHBoxLayout" name="headerLayout">
+      <property name="spacing">
+       <number>15</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="titleLabel">
+        <property name="styleSheet">
+         <string notr="true">font-size:24pt; font-weight:bold; color:#ffffff;</string>
+        </property>
+        <property name="text">
+         <string>Patient Management</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="usernameLabel">
+        <property name="styleSheet">
+         <string notr="true">color:#cccccc; font-size:13pt;</string>
+        </property>
+        <property name="text">
+         <string>User: </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="logoutButton">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Logout</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+
+    <!-- Patients List Label -->
+    <item>
+     <widget class="QLabel" name="patientsLabel">
+      <property name="styleSheet">
+       <string notr="true">color:rgb(158, 162, 217); font-size:16pt; font-weight:bold;</string>
+      </property>
+      <property name="text">
+       <string>Your Patients</string>
+      </property>
+     </widget>
+    </item>
+
+    <!-- List Widget for Patients -->
+    <item>
+     <widget class="QListWidget" name="patientList">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>300</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+
+    <!-- Button Row -->
+    <item>
+     <layout class="QHBoxLayout" name="buttonLayout">
+      <property name="spacing">
+       <number>15</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="addButton">
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Add Patient</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="historyButton">
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>History</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="paymentButton">
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Payment</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
