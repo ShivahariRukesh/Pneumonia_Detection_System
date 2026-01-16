@@ -4,6 +4,8 @@
 import sys
 import requests
 import json
+import os
+from dotenv import load_dotenv
 
 import warnings
 from PIL import Image, ImageEnhance
@@ -23,6 +25,8 @@ from PyQt5.QtCore import QUrl, pyqtSignal, Qt,QObject
 
 from PyQt5.QtGui import QDesktopServices, QFont,QPixmap
 
+load_dotenv()
+
 class Communicate(QObject):
     patientName = pyqtSignal(str)
     userName = pyqtSignal(str)
@@ -32,59 +36,72 @@ class Communicate(QObject):
 class Home(QWidget):
     def __init__(self,communicate):
         super().__init__()
+        loadUi("home.ui",self)
         self.initUI(communicate)
 
     def initUI(self,communicate):
+        self.communicate = communicate
+        self.username = None
+        self.patientname = None
+
+        # Connect signals
+        self.goBackButton.clicked.connect(self.goBack)
+        self.openFileButton.clicked.connect(self.upload_image)
+        self.predictButton.clicked.connect(self.predict_result)
+
+        # Connect to signals from communicator
+        self.communicate.patientName.connect(self.update_patientName)
+        self.communicate.userName.connect(self.setUserName)
      
      # Create widgets
-     goBackButton = QPushButton('GoBack', self)
-     self.patientnamelabel = QLabel("None welcome!!")
-     self.patientnamelabel.setStyleSheet("font-weight: bold; color: #FFE8E3; font-size: 28px;background-color:#2A2929; padding-left:10px")
-     self.articleLabel = QLabel("..")
-     self.articleLabel.setWordWrap(True)    
-     self.articleLabel.setStyleSheet("font-weight: bold; color: #A25467; font-size: 20px;background-color:#2A2929; padding:10px")
-     self.articleLabel.setFixedHeight(400)
-     openFileButton = QPushButton("Open File",self)
-     predictButton =QPushButton("Predict", self)
-     predictButton.setStyleSheet("color: white;background-color:black;")
-     openFileButton.setStyleSheet("color: white; background-color:black;")
+    #  goBackButton = QPushButton('GoBack', self)
+    #  self.patientnamelabel = QLabel("None welcome!!")
+    #  self.patientnamelabel.setStyleSheet("font-weight: bold; color: #FFE8E3; font-size: 28px;background-color:#2A2929; padding-left:10px")
+    #  self.articleLabel = QLabel("..")
+    #  self.articleLabel.setWordWrap(True)    
+    #  self.articleLabel.setStyleSheet("font-weight: bold; color: #A25467; font-size: 20px;background-color:#2A2929; padding:10px")
+    #  self.articleLabel.setFixedHeight(400)
+    #  openFileButton = QPushButton("Open File",self)
+    #  predictButton =QPushButton("Predict", self)
+    #  predictButton.setStyleSheet("color: white;background-color:black;")
+    #  openFileButton.setStyleSheet("color: white; background-color:black;")
 
 
 
      # print("patentname",self.patientName)
 
      # Connect button click signal to a custom function
-     goBackButton.clicked.connect(self.goBack)
-     goBackButton.setFixedSize(50, 50)
+    #  goBackButton.clicked.connect(self.goBack)
+    #  goBackButton.setFixedSize(50, 50)
 
-     openFileButton.clicked.connect(self.upload_image)
-     predictButton.clicked.connect(self.predict_result)
+    #  openFileButton.clicked.connect(self.upload_image)
+    #  predictButton.clicked.connect(self.predict_result)
      # Create layout and add widgets
      
-     layout = QVBoxLayout(self)
-     self.username=None
-     self.communicate = communicate
-     self.communicate.patientName.connect(self.update_patientName)
-     self.communicate.userName.connect(self.setUserName)
-     self.patientname =None
+    #  layout = QVBoxLayout(self)
+    #  self.username=None
+    #  self.communicate = communicate
+    #  self.communicate.patientName.connect(self.update_patientName)
+    #  self.communicate.userName.connect(self.setUserName)
+    #  self.patientname =None
 
-     layout.addWidget(goBackButton)
-     layout.addWidget(self.patientnamelabel)
-     layout.addWidget(self.articleLabel)
-     layout.addWidget(openFileButton)
-     layout.addWidget(predictButton)    
-     # Set layout for the main window
-     self.setLayout(layout)
-     # Set window properties
-     self.setWindowTitle('Home Page')
-     self.setGeometry(100, 100, 400, 300)
+    #  layout.addWidget(goBackButton)
+    #  layout.addWidget(self.patientnamelabel)
+    #  layout.addWidget(self.articleLabel)
+    #  layout.addWidget(openFileButton)
+    #  layout.addWidget(predictButton)    
+    #  # Set layout for the main window
+    #  self.setLayout(layout)
+    #  # Set window properties
+    #  self.setWindowTitle('Home Page')
+    #  self.setGeometry(100, 100, 400, 300)
 
     def update_patientName(self,val):
          articleArr =["Haemophilus influenzae type b (Hib) is a type of bacteria that can cause pneumonia and  meningitis . The Hib vaccine is recommended for all children under 5 years old",
                             "Pneumonia is an infection that inflames your lungs air sacs (alveoli). The air sacs may fill up with fluid or pus, causing symptoms such as a cough, fever, chills and trouble breathing",
                             "Symptoms of pneumonia include cough-(you may cough up yellow or green mucus), fever, shortness of breath, chest pain, fatigue, and in severe cases, confusion."]
          self.patientname = val
-         self.patientnamelabel.setText("Welcome!! "+val.upper()) 
+         self.patientNameLabel.setText("Welcome!! "+val.upper()) 
          self.articleLabel.setText(random.choice(articleArr))
          print("Home pn ",val)
 
@@ -115,11 +132,7 @@ class Home(QWidget):
         path=str(path)
         print(path)
 
-        # For windows
-        # model=load_model('D:\\sem7\\project\\modelTrain1.h5')
-        
-        # For MacOs 
-        model=load_model('/Users/joblessapple/Desktop/modelTrain1.h5')
+        model=load_model(os.getenv("PROJECT_PATH")+'/model/modelTrain1.h5')
         
         print("Model:",model)
         img_file=image.load_img(path,target_size=(224,224))
@@ -215,11 +228,11 @@ class ResultDisplayWidget(QWidget):
     def update_label(self,val):
          if(self.text == 'Pneumonia'):
             self.resultLabel.setText(val.upper()+" has "+self.text) 
-            self.pixmap =  QPixmap(r"D:\sem7\project\Python\Unhealthy.jpg")
+            self.pixmap =  QPixmap(os.getenv("PROJECT_PATH")+'/model/modelTrain1.h5')
             self.imageLabel.setPixmap(self.pixmap.scaled(300, 300, Qt.KeepAspectRatio))
          else:
             self.resultLabel.setText(val.upper()+" doesn't have Pneumonia") 
-            self.pixmap =  QPixmap(r"D:\sem7\project\Python\Healthy.png")
+            self.pixmap =  QPixmap(os.getenv("PROJECT_PATH")+'/model/modelTrain1.h5')
             self.imageLabel.setPixmap(self.pixmap.scaled(300, 300, Qt.KeepAspectRatio))                
          print("ResultDIsplay ",val)   
 
@@ -238,15 +251,16 @@ class ResultDisplayWidget(QWidget):
 
 class UserItemWidget(QWidget):
     def __init__(self, communicate, user_data, username, numberOfPrediction):
+        
         super().__init__()
         loadUi("useritemwidget.ui", self)
         
         self.communicate = communicate
         self.user_data = user_data
         self.username = username
-        
+        print("Username is", user_data)
         # Set the patient name (this replaces "Patient Name" placeholder)
-        self.nameLabel.setText(user_data.upper())
+        self.nameLabel.setText(user_data)
         
         # Show or hide the action button based on numberOfPrediction
         if numberOfPrediction > 0:
@@ -282,23 +296,18 @@ class UserInterface(QMainWindow):
         self.username = None
         
         # Connect signals
-        self.logoutButton.clicked.connect(self.goBack)
+      
         self.addButton.clicked.connect(self.addPatient)
         self.historyButton.clicked.connect(self.showHistory)
         self.paymentButton.clicked.connect(self.khaltiPayment)
-        
+        self.logoutButton.clicked.connect(self.logoutHandler)
+
         # Connect to username signal
         self.communicate.userName.connect(self.setUserName)
         # self.communicate = communicate
         # self.username = None
         self.layout = QVBoxLayout()
         
-        self.goBackButton = QPushButton("Logout", self)
-        # self.goBackButton.setFixedSize(50, 50)
-        self.goBackButton.move(300, 10)
-        self.layout.addWidget(self.goBackButton)
-            
-        # self.goBackButton.clicked.connect(self.goBack)
         # self.communicate.userName.connect(self.setUserName)
 
 
@@ -328,47 +337,56 @@ class UserInterface(QMainWindow):
             
             # dataUser =['rem','gem','sem']
             # Create list widget
-            self.user_list = QListWidget()
+            # self.user_list = QListWidget()
             for user in dataUser:
-                item = QListWidgetItem()
-                # widget = UserItemWidget(user)
-                print("The patients are",user["name"], self.username,noPrediction)
-                widget = UserItemWidget(self.communicate,user["name"],self.username,noPrediction)
+
+                print("The patients are", user["name"])
+                widget = UserItemWidget(self.communicate, user["name"], self.username, noPrediction)
+                item = QListWidgetItem(self.patientList)
                 item.setSizeHint(widget.sizeHint())
-                self.user_list.addItem(item)
-                self.user_list.setItemWidget(item, widget)
+                self.patientList.addItem(item)
+                self.patientList.setItemWidget(item, widget)
+
+                # item = QListWidgetItem()
+                # widget = UserItemWidget(user)
+                # print("The patients are",user["name"], self.username,noPrediction)
+                # widget = UserItemWidget(self.communicate,user["name"],self.username,noPrediction)
+                # item.setSizeHint(widget.sizeHint())
+
+                # self.user_list.addItem(item)
+                # self.user_list.setItemWidget(item, widget)
 
                 # Connect the custom signal to a slot function
                 # widget.action_triggered.connect(self.on_action_triggered)    
                 
-            self.layout.addWidget(self.user_list)
+            # self.layout.addWidget(self.user_list)
+            
 
             # Create Add button
-            self.add_button = QPushButton("Add Patient")
-            # self.layout.addWidget(self.add_button, alignment=QtCore.Qt.AlignTop | QtCore.Qt.AlignRight)
-            self.layout.addWidget(self.add_button)
-            
-            self.add_button.clicked.connect(self.addPatient)
+            # self.add_button = QPushButton("Add Patient")
+            # # self.layout.addWidget(self.add_button, alignment=QtCore.Qt.AlignTop | QtCore.Qt.AlignRight)
+            # self.layout.addWidget(self.add_button)
+            # self.add_button.clicked.connect(self.addPatient)
 
-            # Create History button
-            self.history_button = QPushButton("History")
-            # self.layout.addWidget(self.history_button, alignment=QtCore.Qt.AlignBottom | QtCore.Qt.AlignLeft)
-            self.layout.addWidget(self.history_button)
+            # # Create History button
+            # self.history_button = QPushButton("History")
+            # # self.layout.addWidget(self.history_button, alignment=QtCore.Qt.AlignBottom | QtCore.Qt.AlignLeft)
+            # self.layout.addWidget(self.history_button)
             
-            self.history_button.clicked.connect(self.showHistory)
+            # self.history_button.clicked.connect(self.showHistory)
 
-            # Create Payment button
-            self.payment_button = QPushButton("Payment")
-            # self.layout.addWidget(self.payment_button, alignment=QtCore.Qt.AlignBottom | QtCore.Qt.AlignRight)
-            self.layout.addWidget(self.payment_button)
+            # # Create Payment button
+            # self.payment_button = QPushButton("Payment")
+            # # self.layout.addWidget(self.payment_button, alignment=QtCore.Qt.AlignBottom | QtCore.Qt.AlignRight)
+            # self.layout.addWidget(self.payment_button)
            
-            self.payment_button.clicked.connect(self.khaltiPayment)
+            # self.payment_button.clicked.connect(self.khaltiPayment)
 
 
-            central_widget = QWidget()
-            central_widget.setLayout(self.layout)
-            self.setCentralWidget(central_widget)        
-    def goBack(self):
+            # central_widget = QWidget()
+            # central_widget.setLayout(self.layout)
+            # self.setCentralWidget(central_widget)        
+    def logoutHandler(self):
         widget_to_remove = widget.widget(widget.currentIndex()+1)
         widget.removeWidget(widget_to_remove)         
         print("back to login")

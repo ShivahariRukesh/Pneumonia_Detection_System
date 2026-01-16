@@ -133,7 +133,8 @@
         </property>
        </spacer>
       </item>
-      <item>
+
+      <!-- <item>
        <widget class="QLabel" name="usernameLabel">
         <property name="styleSheet">
          <string notr="true">color:#cccccc; font-size:13pt;</string>
@@ -142,7 +143,8 @@
          <string>User: </string>
         </property>
        </widget>
-      </item>
+      </item> -->
+
       <item>
        <widget class="QPushButton" name="logoutButton">
         <property name="minimumSize">
@@ -199,7 +201,7 @@
        <widget class="QPushButton" name="addButton">
         <property name="minimumSize">
          <size>
-          <width>150</width>
+          <width>100</width>
           <height>45</height>
          </size>
         </property>
@@ -225,7 +227,7 @@
        <widget class="QPushButton" name="historyButton">
         <property name="minimumSize">
          <size>
-          <width>150</width>
+          <width>100</width>
           <height>45</height>
          </size>
         </property>
@@ -238,7 +240,7 @@
        <widget class="QPushButton" name="paymentButton">
         <property name="minimumSize">
          <size>
-          <width>150</width>
+          <width>100</width>
           <height>45</height>
          </size>
         </property>

@@ -3,3 +3,5 @@ myenv/
 __pycache__
 /backend/node_modules
 venv
+modelTrain1.h5
+.env
